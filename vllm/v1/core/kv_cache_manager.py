@@ -378,8 +378,10 @@ class KVCacheManager:
         # insufficient free blocks.
         # Should call this function before allocating new blocks to reduce
         # the number of evicted blocks.
+        # In-flight steps still read below the optimistic computed-token boundary.
         self.coordinator.remove_skipped_blocks(
-            request.request_id, total_computed_tokens
+            request.request_id,
+            max(0, total_computed_tokens - request.num_in_flight_tokens),
         )
 
         num_blocks_to_allocate = self.coordinator.get_num_blocks_to_allocate(

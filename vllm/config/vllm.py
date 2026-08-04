@@ -507,6 +507,12 @@ class VllmConfig:
         return pp_size
 
     @property
+    def max_in_flight_tokens(self) -> int:
+        return (
+            self.max_concurrent_batches * self.scheduler_config.max_num_batched_tokens
+        )
+
+    @property
     def num_speculative_tokens(self) -> int:
         if (
             self.speculative_config is not None

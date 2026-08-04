@@ -440,9 +440,9 @@ class ChunkedLocalAttentionSpec(AttentionSpec):
 
     def max_memory_usage_bytes(self, vllm_config: VllmConfig) -> int:
         max_model_len = vllm_config.model_config.max_model_len
-        max_num_batched_tokens = vllm_config.scheduler_config.max_num_batched_tokens
         max_blocks = self.max_admission_blocks_per_request(
-            max_num_batched_tokens=max_num_batched_tokens, max_model_len=max_model_len
+            max_num_batched_tokens=vllm_config.max_in_flight_tokens,
+            max_model_len=max_model_len,
         )
         return max_blocks * self.page_size_bytes
 
@@ -512,9 +512,9 @@ class SlidingWindowSpec(AttentionSpec):
             "DCP not support sliding window."
         )
         max_model_len = vllm_config.model_config.max_model_len
-        max_num_batched_tokens = vllm_config.scheduler_config.max_num_batched_tokens
         max_blocks = self.max_admission_blocks_per_request(
-            max_num_batched_tokens=max_num_batched_tokens, max_model_len=max_model_len
+            max_num_batched_tokens=vllm_config.max_in_flight_tokens,
+            max_model_len=max_model_len,
         )
         return max_blocks * self.page_size_bytes
 
