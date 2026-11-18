@@ -125,12 +125,21 @@ def test_token_ids_view_searches_in_place():
     tokens = TokenBuffer([1, 2, 3, 4])
     view = TokenIdsView(tokens, [5, 6])
     assert len(view) == 6 and rfind_tokens(view, (2, 6)) == 5
+    assert view[2:5] == [3, 4, 5]
+    assert view[-1] == 6
+    assert view[::-2] == [6, 4, 2]
+    assert view._list is None  # short reads don't copy the full token history
     view.pop()
     view.pop()
     view.pop()
     # Now tokens[:3]: the search stops before the popped 4 and the suffix.
     assert len(view) == 3 and rfind_tokens(view, (4, 6)) == -1
     assert rfind_tokens(view, (2,)) == 1
+    assert view[:] == [1, 2, 3]
+    with pytest.raises(IndexError):
+        view[3]
+    with pytest.raises(IndexError):
+        view[-4]
     assert view._list is None  # searching didn't copy the tokens
     assert list(view) == [1, 2, 3] and view[-1] == 3
     view.pop()
