@@ -337,13 +337,11 @@ class StructuredOutputManager:
         input_ids = TokenIdsView(
             request._all_token_ids, () if spec_tokens_committed else spec_tokens
         )
-        delta_ids = list(spec_tokens)
         constraint_start = num_spec_tokens + 1
         for i in range(num_spec_tokens, 0, -1):
-            if reasoner.is_reasoning_end_streaming(input_ids, delta_ids):
+            if reasoner.is_reasoning_end_streaming(input_ids, (spec_tokens[i - 1],)):
                 constraint_start = i
             input_ids.pop()
-            delta_ids.pop()
         return ConstraintBounds(constraint_start, constraint_start)
 
     def trim_spec_tokens(self, request: "Request", spec_tokens: list[int]) -> list[int]:

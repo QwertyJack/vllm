@@ -1,0 +1,18 @@
+Recorded shape, normalized marker IDs:
+old 8
+pr 4
+single 4
+Targeted committed/uncommitted scenarios: 72 passed
+K3 PR/single-token boundary comparisons: 109655 passed
+Candidate view/list slice comparisons: 36000 passed
+No-close draft: n, PR delta volume, single-token delta volume
+4 10 4
+8 36 8
+16 136 16
+32 528 32
+64 2080 64
+128 8256 128
+History length, existing-view reads, bounded-slice-view reads
+128 128 3
+8192 8192 3
+131072 131072 3
